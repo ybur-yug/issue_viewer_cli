@@ -6,7 +6,7 @@ defmodule GhIssues.CLI do
   """
   @spec run(list) :: tuple
   def run(argv) do
-    argv |> parse_args
+    argv |> parse_args |> process
   end
 
   @doc """
@@ -19,14 +19,23 @@ defmodule GhIssues.CLI do
     parse = OptionParser.parse(argv, switches: [ help: :boolean],
      aliases: [ h: :help ])
    case parse do
-     { [ help: true ], _, _ }
+     {[ help: true ], _, _}
      -> :help
-     { _, [ user, repo, count ], _ }
-     -> { user, repo, count |> String.to_integer }
-     { _, [ user, repo ], _ }
-     -> { user, repo, @default_count }
+     {_, [ user, repo, count ], _}
+     -> { user, repo, count |> String.to_integer}
+     {_, [ user, repo ], _ }
+     -> { user, repo, @default_count}
      _ -> :help
    end
+  end
+
+  def process(:help) do
+    IO.puts "Usage: issues <user> <repo> [ count | #{@default_count} ]"
+    System.halt(0)
+  end
+
+  def process({user, repo, _count}) do
+    GhIssues.GithubIssueRetriever.fetch(user, repo)
   end
     
 end
