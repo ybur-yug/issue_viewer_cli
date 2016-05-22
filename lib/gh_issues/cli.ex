@@ -22,9 +22,9 @@ defmodule GhIssues.CLI do
      {[ help: true ], _, _}
      -> :help
      {_, [ user, repo, count ], _}
-     -> { user, repo, count |> String.to_integer}
+     -> {user, repo, count |> String.to_integer}
      {_, [ user, repo ], _ }
-     -> { user, repo, @default_count}
+     -> {user, repo, @default_count}
      _ -> :help
    end
   end

@@ -11,17 +11,17 @@ defmodule GhIssues.GithubIssueRetriever do
     |> handle_response
   end
 
-  @spec issues_url(string, string) :: string
+  @spec issues_url(String.t, String.t) :: String.t
   def issues_url(user, repo) do
     "https://api.github.com/repos/#{user}/#{repo}/issues"
   end
 
-  def handle_response({ :ok, %{status_code: 200, body: body}}) do
-    { :ok, body }
+  def handle_response({:ok, %{status_code: 200, body: body}}) do
+    {:ok, (body |> Poison.Parser.parse!)}
   end
 
-  def handle_response({ _, %{status_code: _, body: body}}) do
-    { :error, body }
+  def handle_response({_, %{status_code: _, body: body}}) do
+    {:error, (body |> Poison.Parser.parse!)}
   end
 
 end

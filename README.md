@@ -1,6 +1,14 @@
-# GhIssues
+# Github Issue Viewer (CLI)
+Based exactly off the Programming Elixir 1.2 book's example of the same thing.
+I plan to extend it and customize with special features for triaging Ecto, Phoenix, and Elixir issues.
+It is a complete work in progress and has no real features except grabbing issues from the API right now.
 
-**TODO: Add description**
+## Usage
+
+```elixir
+GhIssues.GithubIssueRetriever.fetch("ybur-yug", "gkv")
+# => {:ok, a_bunch_of_maps_parsed_from_json}
+```
 
 ## Installation
 
