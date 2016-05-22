@@ -4,7 +4,7 @@ defmodule GhIssues.CLI do
   @moduledoc """
   Handle the CLI parsing of github issues and create a table of the last N issues.
   """
-  @spec run(list) :: tuple
+  @spec run(list()) :: tuple
   def run(argv) do
     argv |> parse_args |> process
   end
@@ -14,7 +14,7 @@ defmodule GhIssues.CLI do
   Otherwise it is a Github user name, repo name, & (optionally) the number of entries to format.
   Return a tuple of `{ user, repo, count }`, or `:help` if help was given.
   """
-  @spec parse_args(list) :: list()
+  @spec parse_args(list()) :: list()
   def parse_args(argv) do
     parse = OptionParser.parse(argv, switches: [ help: :boolean],
      aliases: [ h: :help ])
@@ -36,6 +36,29 @@ defmodule GhIssues.CLI do
 
   def process({user, repo, _count}) do
     GhIssues.GithubIssueRetriever.fetch(user, repo)
+    |> decode_response
+    |> convert_to_list_of_maps
+    |> sort_into_ascending_order
   end
-    
+
+  def decode_response({:ok, body}), do: body
+
+  def decode_response({:error, error}) do
+    {_, message} = List.keyfind(error, "message", 0)
+    IO.puts "Error fetching from Github: #{message}"
+    System.halt(2)
+  end
+
+  @spec convert_to_list_of_maps(list()) :: list()
+  def convert_to_list_of_maps(list) do
+    list
+    |> Enum.map(&Enum.into(&1, Map.new))
+  end
+
+  @spec sort_into_ascending_order(list()) :: list()
+  def sort_into_ascending_order(issues) do
+    Enum.sort issues,
+    fn i, i2 -> i["created_at"] <= i2["created_at"] end
+  end
+
 end

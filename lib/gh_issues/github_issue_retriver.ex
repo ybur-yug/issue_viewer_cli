@@ -2,6 +2,7 @@ defmodule GhIssues.GithubIssueRetriever do
   @moduledoc """
   Github API Interface for issue fetching
   """
+  @github_url Application.get_env(:issues, :github_url)
 
   @user_agent [ {"User-agent", "Bobdawg"} ]
 
@@ -13,7 +14,7 @@ defmodule GhIssues.GithubIssueRetriever do
 
   @spec issues_url(String.t, String.t) :: String.t
   def issues_url(user, repo) do
-    "https://api.github.com/repos/#{user}/#{repo}/issues"
+    "#{@github_url}/repos/#{user}/#{repo}/issues"
   end
 
   def handle_response({:ok, %{status_code: 200, body: body}}) do
