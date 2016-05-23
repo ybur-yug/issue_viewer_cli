@@ -2,7 +2,7 @@ defmodule GhIssues.GithubIssueRetriever do
   @moduledoc """
   Github API Interface for issue fetching
   """
-  @github_url Application.get_env(:issues, :github_url)
+  @github_url Application.get_env(:gh_issues, :github_url)
 
   @user_agent [ {"User-agent", "Bobdawg"} ]
 

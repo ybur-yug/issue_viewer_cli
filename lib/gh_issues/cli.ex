@@ -34,11 +34,13 @@ defmodule GhIssues.CLI do
     System.halt(0)
   end
 
-  def process({user, repo, _count}) do
-    GhIssues.GithubIssueRetriever.fetch(user, repo)
-    |> decode_response
-    |> convert_to_list_of_maps
-    |> sort_into_ascending_order
+  def process({user, repo, count}) do
+    c = GhIssues.GithubIssueRetriever.fetch(user, repo)
+    a = c |> decode_response
+          |> convert_to_list_of_maps
+          |> sort_into_ascending_order
+          |> GhIssues.Printer.foo
+        #  |> Enum.take(count)
   end
 
   def decode_response({:ok, body}), do: body

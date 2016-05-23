@@ -25,6 +25,10 @@ defmodule CLITest do
     assert issues == ~w{a b c}
   end
 
+  test "some stuff" do
+    result = (GhIssues.CLI.process({"ybur-yug", "gkv", "50"}) |> GhIssues.Printer.foo)
+  end
+
   defp fake_created_at_list(values) do
     data = for value <- values,
     do: [{"created_at", value}, {"other_data", "xxx"} ]
